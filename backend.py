@@ -19,7 +19,7 @@ def home():
 	return render_template('index.html')
 
 
-@app.route('/api', methods=['GET', 'POST'])
+@app.route('/api', methods=['POST'])
 def api():
 	if request.method == 'POST':
 		month = int(request.values.get('month'))
@@ -36,4 +36,4 @@ def api():
 				row['description'] = row['description'].replace("\\n","\n").replace("\\r","\n").replace("\\","")
 			return json.dumps(result)
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", port=9000)
