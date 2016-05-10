@@ -1,0 +1,77 @@
+<! DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Search the history
+		</title>
+		<link rel="stylesheet" type="text/css" href="static/css/materialize.css">
+		<link rel="stylesheet" type="text/css" href="static/css/style.css">
+	</head>
+
+	<body>
+
+		<div class="container">
+			<center><h2>Search the history</h2></center>
+			
+			<br />
+			<div class="row">
+				<div class="input-field col s10 m6 offset-m3 offset-s1">
+					<input type="date" id="datepick" class="datepicker">
+					<label class="active" for="datepick" type="text">Pick a date</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s10 m6 offset-m3 offset-s1">
+					<h4 id="heading" style="text-align:justify;"></h4>
+ 					<p class="content" style="text-align:justify;"></p>
+
+				</div>
+
+			</div>
+		</div>
+
+
+
+		<script type="text/javascript" src="static/js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="static/js/materialize.js"></script>
+		<script type="text/javascript">
+			$input = $('.datepicker').pickadate({
+			    selectMonths: true, 
+			    selectYears: 255,
+			    format: 'dd-mm-yyyy',
+			    onSet: function () {
+			    	var x,y,year,date,month;
+			   		x = $('.datepicker').pickadate().val().toString();
+			    	y = x.split(/[-]+/);
+			    	date = y[0];
+			    	mon = y[1];
+			    	ye = y[2];
+			    	
+			    	if(date && mon && ye){			    		
+			    		$.post("/api", {day: date, month: mon, year: ye})
+							.done(function(data) {
+								result = JSON.parse(data);
+								if(result[0]) {
+									if(result[0]['heading']) {
+										$('#heading').text(result[0]['heading']);
+										$('.content').text(result[0]['description']);
+									}
+								}
+								else {
+									$('#heading').text("");
+									$('.content').text("The database is still building, may be you will find something in future");
+								}
+
+							});
+			    	}
+			    }
+			});
+/*
+			
+				
+*/
+		</script>
+
+	</body>
+
+</html>
